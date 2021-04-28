@@ -54,7 +54,8 @@ var userAgentHandler = request.NamedHandler{
 // NewClientWithDefaults creates the client and defaults region
 func (defaultClientFactory DefaultClientFactory) NewClientWithDefaults() Client {
 	awsSession := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: loadSharedConfigState(),
+		SharedConfigState:       loadSharedConfigState(),
+		AssumeRoleTokenProvider: YubikeyTokenProvider{KeyName: "nhs"}.Provide,
 	}))
 
 	awsSession.Handlers.Build.PushBackNamed(userAgentHandler)
@@ -68,7 +69,8 @@ func (defaultClientFactory DefaultClientFactory) NewClientWithDefaults() Client 
 // NewClientWithFipsEndpoint overrides the default ECR service endpoint in a given region to use the FIPS endpoint
 func (defaultClientFactory DefaultClientFactory) NewClientWithFipsEndpoint(region string) (Client, error) {
 	awsSession := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: loadSharedConfigState(),
+		SharedConfigState:       loadSharedConfigState(),
+		AssumeRoleTokenProvider: YubikeyTokenProvider{KeyName: "nhs"}.Provide,
 	}))
 
 	awsSession.Handlers.Build.PushBackNamed(userAgentHandler)
@@ -88,7 +90,8 @@ func (defaultClientFactory DefaultClientFactory) NewClientWithFipsEndpoint(regio
 // NewClientFromRegion uses the region to create the client
 func (defaultClientFactory DefaultClientFactory) NewClientFromRegion(region string) Client {
 	awsSession := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: loadSharedConfigState(),
+		SharedConfigState:       loadSharedConfigState(),
+		AssumeRoleTokenProvider: YubikeyTokenProvider{KeyName: "nhs"}.Provide,
 	}))
 	awsSession.Handlers.Build.PushBackNamed(userAgentHandler)
 	awsConfig := &aws.Config{Region: aws.String(region)}
